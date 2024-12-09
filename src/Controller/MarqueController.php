@@ -27,15 +27,17 @@ class MarqueController extends AbstractController
         ]);
     }
 
-    #[Route('/marque/ajout', name: 'ajout_aquarium', methods: ['GET', 'POST'])]
+    #[Route('/marque/ajout{id}', name: 'ajout_aquarium', methods: ['GET', 'POST'])]
     public function ajoutAquarium(Request $request, EntityManagerInterface $entityManager): Response
     {
         $marque = new Marques();
-        $form = $this->createForm(AquariumAjoutType::class, $marque);
+        $aquarium = new Aquarium();
+        $id = $marque->getId();
+        $form = $this->createForm(AquariumAjoutType::class, $aquarium);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $marque = $form->getData();
-            $entityManager->persist($marque);
+            $aquarium = $form->getData();
+            $entityManager->persist($aquarium);
             $entityManager->flush();
             return $this->redirectToRoute('app_home');
         }

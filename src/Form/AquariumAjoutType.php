@@ -8,6 +8,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AquariumAjoutType extends AbstractType
 {
@@ -25,6 +27,10 @@ class AquariumAjoutType extends AbstractType
             ->add('id_marque', EntityType::class, [
                 'class' => Marques::class,
                 'choice_label' => 'id',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Ajouter',
+                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }
