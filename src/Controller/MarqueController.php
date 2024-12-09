@@ -5,31 +5,33 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Form\MarquesAjoutType;
-use App\Form\MarquesModifType;
-use App\Form\MarquesSuppType;
+use App\Form\AquariumAjoutType;
+use App\Form\AquariumModifType;
+use App\Form\AquariumSuppType;
 use App\Repository\MarquesRepository;
 use App\Entity\Marques;
+use App\Entity\Aquarium;
+use App\Repository\AquariumRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 
-class HomeController extends AbstractController
+class MarqueController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/marque{id}', name: 'app_marque', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, Marques $marque): Response
     {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'marques' => $entityManager->getRepository(Marques::class)->findAll(),
+        return $this->render('marque/index.html.twig', [
+            'controller_name' => 'MarqueController',
+            'marque' => $marque,
         ]);
     }
 
-    #[Route('/ajout', name: 'app_ajout')]
-    public function ajout(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/marque/ajout', name: 'ajout_aquarium', methods: ['GET', 'POST'])]
+    public function ajoutAquarium(Request $request, EntityManagerInterface $entityManager): Response
     {
         $marque = new Marques();
-        $form = $this->createForm(MarquesAjoutType::class, $marque);
+        $form = $this->createForm(AquariumAjoutType::class, $marque);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $marque = $form->getData();
@@ -37,7 +39,7 @@ class HomeController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('app_home');
         }
-        return $this->render('home/ajout.html.twig', [
+        return $this->render('marque/ajout.html.twig', [
             'marque' => $marque,
             'form' => $form,
         ]);
